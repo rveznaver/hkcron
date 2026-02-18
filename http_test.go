@@ -247,7 +247,7 @@ func TestTimerHandlerConcurrent(t *testing.T) {
 	const concurrency = 50
 	done := make(chan bool, concurrency)
 
-	for i := 0; i < concurrency; i++ {
+	for i := range concurrency {
 		go func(id int) {
 			// Alternate between GET and PUT
 			if id%2 == 0 {
@@ -274,7 +274,7 @@ func TestTimerHandlerConcurrent(t *testing.T) {
 	}
 
 	// Wait for all requests to complete
-	for i := 0; i < concurrency; i++ {
+	for range concurrency {
 		<-done
 	}
 }

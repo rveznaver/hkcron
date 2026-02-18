@@ -70,8 +70,8 @@ var (
 // nvramKey converts a Store key to an NVRAM variable name.
 // Pairing keys are converted from hex-encoded UUIDs to readable UUID strings.
 func nvramKey(key string) string {
-	if strings.HasSuffix(key, ".pairing") {
-		hexName := strings.TrimSuffix(key, ".pairing")
+	if before, ok := strings.CutSuffix(key, ".pairing"); ok {
+		hexName := before
 		name, err := hex.DecodeString(hexName)
 		if err != nil {
 			return nvramPrefix + key
@@ -161,7 +161,7 @@ func (s *nvramStore) KeysWithSuffix(suffix string) (keys []string, err error) {
 		return nil, err
 	}
 
-	for _, line := range strings.Split(out, "\n") {
+	for line := range strings.SplitSeq(out, "\n") {
 		// Skip empty lines
 		if line == "" {
 			continue

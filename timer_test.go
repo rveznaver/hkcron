@@ -122,11 +122,11 @@ func TestTimerConcurrentAccess(t *testing.T) {
 	iterations := 100
 
 	// Multiple goroutines reading End()
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for j := 0; j < iterations; j++ {
+			for range iterations {
 				_ = timer.End()
 				time.Sleep(time.Microsecond)
 			}
@@ -134,11 +134,11 @@ func TestTimerConcurrentAccess(t *testing.T) {
 	}
 
 	// Multiple goroutines reading TimeRemaining()
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for j := 0; j < iterations; j++ {
+			for range iterations {
 				_ = timer.TimeRemaining()
 				time.Sleep(time.Microsecond)
 			}
@@ -149,7 +149,7 @@ func TestTimerConcurrentAccess(t *testing.T) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		for j := 0; j < iterations; j++ {
+		for range iterations {
 			timer.Reset(time.Hour)
 			time.Sleep(time.Millisecond)
 		}
@@ -178,7 +178,7 @@ func TestTimerResetMultipleTimes(t *testing.T) {
 	timer := NewSecondsTimer(time.Hour)
 	timer.Stop()
 
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		duration := time.Duration(i+1) * time.Second
 		timer.Reset(duration)
 
